@@ -349,3 +349,10 @@ button.danger {
 .char-count.over {
   color: #d9534f;
 }
+
+button,
+input,
+textarea,
+select {
+  touch-action: manipulation;
+}
