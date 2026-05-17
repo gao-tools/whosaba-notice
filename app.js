@@ -1,8 +1,9 @@
 const days = ["月", "火", "水", "木", "金", "土", "日"];
 const ALLIANCE_BIRTHDAY = "2025-04-07";
 
-const defaultTemplates = {
-  normal: {
+const defaultTemplates = [
+  {
+    id: "normal",
     name: "通常週",
     days: {
       月: { buff: "建設", event: "イベなし" },
@@ -14,7 +15,8 @@ const defaultTemplates = {
       日: { buff: "なし", event: "兵器" }
     }
   },
-  svsPrepare: {
+  {
+    id: "svsPrepare",
     name: "SVS準備週",
     days: {
       月: { buff: "建設", event: "イベなし" },
@@ -26,7 +28,8 @@ const defaultTemplates = {
       日: { buff: "なし", event: "兵器" }
     }
   },
-  svsBattle: {
+  {
+    id: "svsBattle",
     name: "SVS戦闘週",
     days: {
       月: { buff: "建設", event: "イベなし" },
@@ -38,7 +41,9 @@ const defaultTemplates = {
       日: { buff: "なし", event: "兵器" }
     }
   }
-};
+];
+
+let templates = [];
 
 const defaultEventPresets = [
   { label: "熊", text: "21:00〜 熊【live】" },
@@ -75,8 +80,6 @@ let specialPresets = [];
 
 let eventPresets = [];
 
-let templates = structuredClone(defaultTemplates);
-
 function getTodayInfo() {
   const now = new Date();
   const week = ["日", "月", "火", "水", "木", "金", "土"];
@@ -108,9 +111,40 @@ function mergeTemplates(saved) {
 function initTemplates() {
   try {
     const saved = JSON.parse(localStorage.getItem("weeklyTemplates"));
-    templates = mergeTemplates(saved);
+
+    if (Array.isArray(saved)) {
+      templates = saved;
+    } else if (saved && typeof saved === "object") {
+      templates = Object.keys(saved).map(key => ({
+        id: key,
+        name: saved[key].name || key,
+        days: saved[key].days
+      }));
+    } else {
+      templates = structuredClone(defaultTemplates);
+    }
   } catch (e) {
     templates = structuredClone(defaultTemplates);
+  }
+
+  renderWeeklyTemplateSelect();
+}
+
+function renderWeeklyTemplateSelect(selectedId) {
+  const select = document.getElementById("weeklyTemplate");
+  const current = selectedId || select.value || templates[0]?.id;
+
+  select.innerHTML = "";
+
+  templates.forEach(template => {
+    const option = document.createElement("option");
+    option.value = template.id;
+    option.textContent = template.name;
+    select.appendChild(option);
+  });
+
+  if (templates.some(t => t.id === current)) {
+    select.value = current;
   }
 }
 
@@ -178,9 +212,13 @@ function calcMigrationDay() {
 
 function loadWeeklyTemplate() {
   const key = document.getElementById("weeklyTemplate").value;
-  const template = templates[key] || templates.normal;
+  const template = templates.find(t => t.id === key) || templates[0];
   const editor = document.getElementById("weeklyEditor");
   const today = getTodayInfo().dayLabel;
+
+  if (!template) return;
+
+  document.getElementById("weeklyTemplateName").value = template.name;
 
   editor.innerHTML = "";
 
@@ -202,15 +240,60 @@ function loadWeeklyTemplate() {
 
 function saveWeeklyTemplate() {
   const key = document.getElementById("weeklyTemplate").value;
+  const template = templates.find(t => t.id === key);
+
+  if (!template) return;
+
+  template.name = document.getElementById("weeklyTemplateName").value.trim() || "名称未設定";
 
   days.forEach(day => {
-    templates[key].days[day].buff = document.getElementById(`buff-${day}`).value;
-    templates[key].days[day].event = document.getElementById(`event-${day}`).value;
+    template.days[day].buff = document.getElementById(`buff-${day}`).value;
+    template.days[day].event = document.getElementById(`event-${day}`).value;
   });
 
   localStorage.setItem("weeklyTemplates", JSON.stringify(templates));
+
+  renderWeeklyTemplateSelect(template.id);
+  loadWeeklyTemplate();
+
   showToast("週間テンプレを保存しました");
-  generateNotice();
+}
+
+function addWeeklyTemplate() {
+  const base = templates.find(t => t.id === document.getElementById("weeklyTemplate").value) || templates[0];
+
+  const newId = "template_" + Date.now();
+
+  const newTemplate = {
+    id: newId,
+    name: "新規テンプレ",
+    days: structuredClone(base.days)
+  };
+
+  templates.push(newTemplate);
+  localStorage.setItem("weeklyTemplates", JSON.stringify(templates));
+
+  renderWeeklyTemplateSelect(newId);
+  loadWeeklyTemplate();
+
+  showToast("週間テンプレを追加しました");
+}
+
+function deleteWeeklyTemplate() {
+  if (templates.length <= 1) {
+    showToast("最低1つは必要です");
+    return;
+  }
+
+  const key = document.getElementById("weeklyTemplate").value;
+  templates = templates.filter(t => t.id !== key);
+
+  localStorage.setItem("weeklyTemplates", JSON.stringify(templates));
+
+  renderWeeklyTemplateSelect(templates[0].id);
+  loadWeeklyTemplate();
+
+  showToast("週間テンプレを削除しました");
 }
 
 function saveSettings() {
@@ -273,7 +356,7 @@ function generateNotice() {
   const footer = document.getElementById("footer").value;
 
   const key = document.getElementById("weeklyTemplate").value;
-  const template = templates[key] || templates.normal;
+  const template = templates.find(t => t.id === key) || templates[0];
 
   const weeklyText = days.map(day => {
     const buff = document.getElementById(`buff-${day}`)?.value || template.days[day].buff;
