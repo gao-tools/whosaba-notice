@@ -55,24 +55,34 @@ const defaultEventPresets = [
 
 const defaultSpecialPresets = [
   {
+    category: "よく使う",
     label: "烈火と牙",
     text: "⚫︎明日から【烈火と牙】"
   },
   {
+    category: "よく使う",
     label: "灯台注意",
     text: "17時以降の灯台は回収せず、明日の朝9時以降に回収しよう！"
   },
   {
+    category: "よく使う",
     label: "アグネス",
     text: "今日のアグネスは17時以降に押してね！"
   },
   {
+    category: "注意喚起",
     label: "シールド",
     text: "シールド切れに注意お願いします！"
   },
   {
+    category: "注意喚起",
     label: "兵調整",
     text: "兵数調整が必要な方は早めにお願いします！"
+  },
+  {
+    category: "SVS",
+    label: "SVS翌日",
+    text: "SVSお疲れさまでした！\n回収忘れ・シールド切れに注意お願いします！"
   }
 ];
 
@@ -579,18 +589,50 @@ function initSpecialPresets() {
 }
 
 function renderSpecialPresetButtons() {
+  renderSpecialCategorySelect();
+
   const box = document.getElementById("specialPresetButtons");
+  const selectedCategory = document.getElementById("specialCategorySelect").value;
+
   box.innerHTML = "";
 
-  specialPresets.forEach(preset => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = preset.label;
-    button.addEventListener("click", () => {
-      addSpecialPreset(preset.text);
+  specialPresets
+    .filter(preset => (preset.category || "未分類") === selectedCategory)
+    .forEach(preset => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = preset.label;
+      button.addEventListener("click", () => {
+        addSpecialPreset(preset.text);
+      });
+      box.appendChild(button);
     });
-    box.appendChild(button);
+}
+
+function renderSpecialCategorySelect() {
+  const select = document.getElementById("specialCategorySelect");
+  const current = select.value || localStorage.getItem("selectedSpecialCategory") || "よく使う";
+
+  const categories = [...new Set(
+    specialPresets.map(preset => preset.category || "未分類")
+  )];
+
+  select.innerHTML = "";
+
+  categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    select.appendChild(option);
   });
+
+  if (categories.includes(current)) {
+    select.value = current;
+  } else if (categories.length > 0) {
+    select.value = categories[0];
+  }
+
+  localStorage.setItem("selectedSpecialCategory", select.value);
 }
 
 function renderSpecialPresetEditor() {
@@ -599,7 +641,11 @@ function renderSpecialPresetEditor() {
 
   specialPresets.forEach((preset, index) => {
     const row = document.createElement("div");
-    row.className = "preset-edit-row";
+    row.className = "preset-edit-row special-edit-row";
+
+    const categoryInput = document.createElement("input");
+    categoryInput.value = preset.category || "未分類";
+    categoryInput.placeholder = "カテゴリ";
 
     const labelInput = document.createElement("input");
     labelInput.value = preset.label;
@@ -619,6 +665,7 @@ function renderSpecialPresetEditor() {
       deleteSpecialPresetRow(index);
     });
 
+    row.appendChild(categoryInput);
     row.appendChild(labelInput);
     row.appendChild(textInput);
     row.appendChild(deleteButton);
@@ -650,9 +697,13 @@ function addSpecialPresetRow() {
   readSpecialPresetEditorValues();
 
   specialPresets.push({
+    category: "よく使う",
     label: "新規",
     text: "⚫︎"
   });
+
+  renderSpecialPresetEditor();
+}
 
   renderSpecialPresetEditor();
 }
@@ -672,12 +723,13 @@ function readSpecialPresetEditorValues() {
   const rows = document.querySelectorAll("#specialPresetEditor .preset-edit-row");
 
   specialPresets = Array.from(rows).map(row => {
-    const labelInput = row.querySelector("input");
-    const textInput = row.querySelector("textarea");
+    const inputs = row.querySelectorAll("input");
+    const textArea = row.querySelector("textarea");
 
     return {
-      label: labelInput.value.trim(),
-      text: textInput.value.trim()
+      category: inputs[0].value.trim() || "未分類",
+      label: inputs[1].value.trim(),
+      text: textArea.value.trim()
     };
   }).filter(preset => preset.label && preset.text);
 }
