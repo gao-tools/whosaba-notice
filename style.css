@@ -322,3 +322,8 @@ button.danger {
 .collapsible-card details > *:not(summary) {
   margin-top: 14px;
 }
+
+#specialPresetEditor textarea {
+  min-height: 90px;
+  line-height: 1.5;
+}
