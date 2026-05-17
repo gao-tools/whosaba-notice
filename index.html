@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GaO新聞メーカー</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <h1>GaO新聞メーカー</h1>
+
+    <section class="card">
+      <label>日付</label>
+      <input id="noticeDate" type="text" placeholder="5月17日(日)" />
+
+      <label>移民日数</label>
+      <input id="migrationDay" type="number" placeholder="103" />
+
+      <label>今日の予定</label>
+      <textarea id="todayEvents" rows="3">①21:00〜 兵器【live】</textarea>
+
+      <label>特記事項</label>
+      <textarea id="specialNotice" rows="5">⚫︎明日から【烈火と牙】
+今日のアグネスは17時以降に押してね！
+あと17時以降の灯台回収せず、明日の朝9時以降に回収しよう！</textarea>
+
+      <button onclick="generateNotice()">通知文を生成</button>
+    </section>
+
+    <section class="card">
+      <h2>固定文言</h2>
+
+      <label>あいさつ</label>
+      <input id="greeting" type="text" value="おは〜ヾ(^▽^)ﾉ" />
+
+      <label>冒頭文</label>
+      <input id="intro" type="text" value="本日の連絡です！" />
+
+      <label>締め文</label>
+      <textarea id="footer" rows="4">★鯖ルール
+星マーク通知で確認を！
+不明点は幹部までヾ(^▽^)ﾉ</textarea>
+
+      <button onclick="saveSettings()">固定文言を保存</button>
+    </section>
+
+    <section class="card">
+      <h2>週間イベント</h2>
+
+      <label>週間テンプレ</label>
+      <select id="weeklyTemplate" onchange="loadWeeklyTemplate()">
+        <option value="normal">通常週</option>
+        <option value="svsPrepare">SVS準備週</option>
+        <option value="svsBattle">SVS戦闘週</option>
+      </select>
+
+      <div id="weeklyEditor"></div>
+
+      <button onclick="saveWeeklyTemplate()">週間テンプレを保存</button>
+    </section>
+
+    <section class="card">
+      <h2>生成結果</h2>
+      <textarea id="result" rows="18"></textarea>
+      <button onclick="copyResult()">コピー</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
