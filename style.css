@@ -428,3 +428,16 @@ select {
 .daily-button:hover {
   opacity: 0.92;
 }
+
+input[type="date"] {
+  max-width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+@media (max-width: 600px) {
+  input[type="date"] {
+    width: 100%;
+    min-width: 0;
+  }
+}
