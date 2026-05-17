@@ -507,6 +507,9 @@ function renderPresetButtons() {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = preset.label;
+    if (preset.category === "毎日") {
+      button.classList.add("daily-button");
+    }
     button.addEventListener("click", () => {
       addEventPreset(preset.text);
     });
