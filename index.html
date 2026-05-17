@@ -67,15 +67,19 @@
       <h2>週間イベント</h2>
 
       <label>週間テンプレ</label>
-      <select id="weeklyTemplate" onchange="loadWeeklyTemplate()">
-        <option value="normal">通常週</option>
-        <option value="svsPrepare">SVS準備週</option>
-        <option value="svsBattle">SVS戦闘週</option>
-      </select>
-
+      <select id="weeklyTemplate" onchange="loadWeeklyTemplate()"></select>
+      
+      <label>テンプレタイトル</label>
+      <input id="weeklyTemplateName" type="text" placeholder="例：通常週" />
+      
       <div id="weeklyEditor"></div>
-
-      <button onclick="saveWeeklyTemplate()">週間テンプレを保存</button>
+      
+      <div class="button-row">
+        <button type="button" onclick="addWeeklyTemplate()">＋ テンプレ追加</button>
+        <button type="button" class="danger" onclick="deleteWeeklyTemplate()">削除</button>
+      </div>
+      
+      <button type="button" class="primary" onclick="saveWeeklyTemplate()">週間テンプレを保存</button>
     </section>
 
     <section class="card">
