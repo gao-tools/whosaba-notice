@@ -327,3 +327,13 @@ button.danger {
   min-height: 90px;
   line-height: 1.5;
 }
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.button-row button {
+  margin-top: 14px;
+}
