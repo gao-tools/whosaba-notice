@@ -1,6 +1,16 @@
 const days = ["月", "火", "水", "木", "金", "土", "日"];
 const ALLIANCE_BIRTHDAY = "2025-04-07";
-
+const specialCategories = [
+  "月",
+  "火",
+  "水",
+  "木",
+  "金",
+  "土",
+  "日",
+  "その他",
+  "未分類"
+];
 const defaultTemplates = [
   {
     id: "normal",
@@ -589,7 +599,11 @@ function initSpecialPresets() {
 
   if (savedText) {
     try {
-      specialPresets = JSON.parse(savedText);
+      specialPresets = JSON.parse(savedText).map(preset => ({
+        category: preset.category || "未分類",
+        label: preset.label,
+        text: preset.text
+      }));
     } catch (e) {
       specialPresets = structuredClone(defaultSpecialPresets);
     }
@@ -610,7 +624,10 @@ function renderSpecialPresetButtons() {
   box.innerHTML = "";
 
   specialPresets
-    .filter(preset => (preset.category || "未分類") === selectedCategory)
+    .filter(
+      preset =>
+        (preset.category || "未分類") === selectedCategory
+    )
     .forEach(preset => {
       const button = document.createElement("button");
       button.type = "button";
@@ -624,28 +641,43 @@ function renderSpecialPresetButtons() {
 
 function renderSpecialCategorySelect() {
   const select = document.getElementById("specialCategorySelect");
-  const current = select.value || localStorage.getItem("selectedSpecialCategory") || "よく使う";
 
-  const categories = [...new Set(
-    specialPresets.map(preset => preset.category || "未分類")
-  )];
+  const rawDate = document.getElementById("noticeDate")?.value;
+
+  let defaultCategory = "その他";
+
+  if (rawDate) {
+    const dateObj = new Date(rawDate + "T00:00:00");
+
+    const week = ["日", "月", "火", "水", "木", "金", "土"];
+
+    defaultCategory = week[dateObj.getDay()];
+  }
+
+  const current =
+    select.value ||
+    localStorage.getItem("selectedSpecialCategory") ||
+    defaultCategory;
 
   select.innerHTML = "";
 
-  categories.forEach(category => {
+  specialCategories.forEach(category => {
     const option = document.createElement("option");
     option.value = category;
     option.textContent = category;
     select.appendChild(option);
   });
 
-  if (categories.includes(current)) {
+  if (specialCategories.includes(current)) {
     select.value = current;
-  } else if (categories.length > 0) {
-    select.value = categories[0];
+  } else {
+    select.value = defaultCategory;
   }
 
-  localStorage.setItem("selectedSpecialCategory", select.value);
+  localStorage.setItem(
+    "selectedSpecialCategory",
+    select.value
+  );
 }
 
 function renderSpecialPresetEditor() {
