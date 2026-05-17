@@ -8,39 +8,59 @@
 </head>
 <body>
   <main class="app">
-    <h1>GaO新聞メーカー</h1>
+    <header class="hero">
+      <div>
+        <p class="badge">Whiteout Survival / GaO Tools</p>
+        <h1>📰 GaO新聞メーカー</h1>
+        <p class="lead">朝の同盟通知をサクッと作成・コピーできます。</p>
+      </div>
+    </header>
 
     <section class="card">
-      <label>日付</label>
-      <input id="noticeDate" type="text" placeholder="5月17日(日)" />
+      <h2>朝通知作成</h2>
+
+      <div class="grid-2">
+        <div>
+          <label>日付</label>
+          <input id="noticeDate" type="text" />
+        </div>
+
+        <div>
+          <label>移民開始日</label>
+          <input id="migrationStartDate" type="date" />
+        </div>
+      </div>
 
       <label>移民日数</label>
-      <input id="migrationDay" type="number" placeholder="103" />
+      <input id="migrationDay" type="number" />
 
       <label>今日の予定</label>
-      <textarea id="todayEvents" rows="3">①21:00〜 兵器【live】</textarea>
+      <div class="preset-buttons">
+        <button type="button" onclick="addEventPreset('①21:00〜 熊【live】')">熊</button>
+        <button type="button" onclick="addEventPreset('①21:00〜 兵器【live】')">兵器</button>
+        <button type="button" onclick="addEventPreset('①20:00〜 峡谷')">峡谷</button>
+        <button type="button" onclick="addEventPreset('①20:00〜 SVS')">SVS</button>
+        <button type="button" onclick="addEventPreset('①砦要塞')">砦</button>
+      </div>
+      <textarea id="todayEvents" rows="4"></textarea>
 
       <label>特記事項</label>
-      <textarea id="specialNotice" rows="5">⚫︎明日から【烈火と牙】
-今日のアグネスは17時以降に押してね！
-あと17時以降の灯台回収せず、明日の朝9時以降に回収しよう！</textarea>
+      <textarea id="specialNotice" rows="6"></textarea>
 
-      <button onclick="generateNotice()">通知文を生成</button>
+      <button class="primary" onclick="generateNotice()">通知文を生成</button>
     </section>
 
     <section class="card">
       <h2>固定文言</h2>
 
       <label>あいさつ</label>
-      <input id="greeting" type="text" value="おは〜ヾ(^▽^)ﾉ" />
+      <input id="greeting" type="text" />
 
       <label>冒頭文</label>
-      <input id="intro" type="text" value="本日の連絡です！" />
+      <input id="intro" type="text" />
 
       <label>締め文</label>
-      <textarea id="footer" rows="4">★鯖ルール
-星マーク通知で確認を！
-不明点は幹部までヾ(^▽^)ﾉ</textarea>
+      <textarea id="footer" rows="4"></textarea>
 
       <button onclick="saveSettings()">固定文言を保存</button>
     </section>
@@ -62,10 +82,12 @@
 
     <section class="card">
       <h2>生成結果</h2>
-      <textarea id="result" rows="18"></textarea>
-      <button onclick="copyResult()">コピー</button>
+      <textarea id="result" rows="20"></textarea>
+      <button class="primary" onclick="copyResult()">コピー</button>
     </section>
   </main>
+
+  <div id="toast" class="toast">コピーしました</div>
 
   <script src="app.js"></script>
 </body>
