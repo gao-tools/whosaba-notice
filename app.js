@@ -376,6 +376,7 @@ function readPresetEditorValues() {
 
   eventPresets = Array.from(rows).map(row => {
     const inputs = row.querySelectorAll("input");
+
     return {
       label: inputs[0].value.trim(),
       text: inputs[1].value.trim()
