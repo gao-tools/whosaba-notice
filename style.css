@@ -442,11 +442,14 @@ input[type="date"] {
   }
 }
 #result {
-  min-height: 420px;
+  min-height: 720px !important;
+  height: 72vh;
   line-height: 1.5;
+  font-size: 15px;
 }
 @media (max-width: 600px) {
   #result {
-    min-height: 520px;
+    height: 78vh;
+    min-height: 780px !important;
   }
 }
