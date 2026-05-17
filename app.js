@@ -41,11 +41,11 @@ const defaultTemplates = {
 };
 
 const defaultEventPresets = [
-  { label: "熊", text: "①21:00〜 熊【live】" },
-  { label: "兵器", text: "①21:00〜 兵器【live】" },
-  { label: "峡谷", text: "①20:00〜 峡谷" },
-  { label: "SVS", text: "①20:00〜 SVS" },
-  { label: "砦", text: "①砦要塞" }
+  { label: "熊", text: "21:00〜 熊【live】" },
+  { label: "兵器", text: "21:00〜 兵器【live】" },
+  { label: "峡谷", text: "20:00〜 峡谷" },
+  { label: "SVS", text: "20:00〜 SVS" },
+  { label: "砦", text: "砦要塞" }
 ];
 
 const defaultSpecialPresets = [
@@ -227,10 +227,40 @@ function saveSettings() {
 
 function addEventPreset(text) {
   const area = document.getElementById("todayEvents");
-  const current = area.value.trim();
 
-  area.value = current ? `${current}\n${text}` : text;
+  const lines = area.value
+    .split("\n")
+    .filter(line => line.trim());
+
+  const nextNumber = lines.length + 1;
+
+  const numberedText = `${toCircledNumber(nextNumber)}${text}`;
+
+  if (!area.value.trim()) {
+    area.value = numberedText;
+  } else {
+    area.value += `\n${numberedText}`;
+  }
+
   generateNotice();
+}
+
+function toCircledNumber(num) {
+  const numbers = [
+    "",
+    "①",
+    "②",
+    "③",
+    "④",
+    "⑤",
+    "⑥",
+    "⑦",
+    "⑧",
+    "⑨",
+    "⑩"
+  ];
+
+  return numbers[num] || `${num}.`;
 }
 
 function generateNotice() {
