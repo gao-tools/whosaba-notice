@@ -356,3 +356,26 @@ textarea,
 select {
   touch-action: manipulation;
 }
+
+.notice-stock-row {
+  border: 1px solid #d5e3ef;
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 12px;
+  background: #f8fbff;
+}
+
+.notice-stock-row textarea {
+  margin-top: 8px;
+  min-height: 120px;
+}
+
+.stock-button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stock-button-row button {
+  margin-top: 10px;
+}
