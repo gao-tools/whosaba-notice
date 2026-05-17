@@ -528,14 +528,15 @@ function deletePresetRow(index) {
 }
 
 function readPresetEditorValues() {
-  const rows = document.querySelectorAll(".preset-edit-row");
+  const rows = document.querySelectorAll("#presetEditor .preset-edit-row");
 
   eventPresets = Array.from(rows).map(row => {
-    const inputs = row.querySelectorAll("input");
+    const labelInput = row.querySelector("input");
+    const textInput = row.querySelector("input:nth-of-type(2)");
 
     return {
-      label: inputs[0].value.trim(),
-      text: inputs[1].value.trim()
+      label: labelInput.value.trim(),
+      text: textInput.value.trim()
     };
   }).filter(preset => preset.label && preset.text);
 }
@@ -665,11 +666,12 @@ function readSpecialPresetEditorValues() {
   const rows = document.querySelectorAll("#specialPresetEditor .preset-edit-row");
 
   specialPresets = Array.from(rows).map(row => {
-    const inputs = row.querySelectorAll("input");
+    const labelInput = row.querySelector("input");
+    const textInput = row.querySelector("textarea");
 
     return {
-      label: inputs[0].value.trim(),
-      text: inputs[1].value.trim()
+      label: labelInput.value.trim(),
+      text: textInput.value.trim()
     };
   }).filter(preset => preset.label && preset.text);
 }
