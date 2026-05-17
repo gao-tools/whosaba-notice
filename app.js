@@ -705,9 +705,6 @@ function addSpecialPresetRow() {
   renderSpecialPresetEditor();
 }
 
-  renderSpecialPresetEditor();
-}
-
 function deleteSpecialPresetRow(index) {
   specialPresets.splice(index, 1);
 
