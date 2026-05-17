@@ -674,32 +674,6 @@ function renderSpecialCategorySelect(forceDefault = false) {
     : defaultCategory;
 }
 
-  const current =
-    select.value ||
-    localStorage.getItem("selectedSpecialCategory") ||
-    defaultCategory;
-
-  select.innerHTML = "";
-
-  specialCategories.forEach(category => {
-    const option = document.createElement("option");
-    option.value = category;
-    option.textContent = category;
-    select.appendChild(option);
-  });
-
-  if (specialCategories.includes(current)) {
-    select.value = current;
-  } else {
-    select.value = defaultCategory;
-  }
-
-  localStorage.setItem(
-    "selectedSpecialCategory",
-    select.value
-  );
-}
-
 function renderSpecialPresetEditor() {
   const editor = document.getElementById("specialPresetEditor");
   editor.innerHTML = "";
