@@ -335,19 +335,16 @@ function renderPresetEditor() {
     const labelInput = document.createElement("input");
     labelInput.value = preset.label;
     labelInput.placeholder = "表示名";
-    labelInput.dataset.index = index;
-    labelInput.dataset.field = "label";
 
     const textInput = document.createElement("input");
     textInput.value = preset.text;
     textInput.placeholder = "挿入内容";
-    textInput.dataset.index = index;
-    textInput.dataset.field = "text";
 
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
     deleteButton.className = "danger";
     deleteButton.textContent = "削除";
+
     deleteButton.addEventListener("click", () => {
       deletePresetRow(index);
     });
