@@ -441,3 +441,12 @@ input[type="date"] {
     min-width: 0;
   }
 }
+#result {
+  min-height: 420px;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  #result {
+    min-height: 520px;
+  }
+}
