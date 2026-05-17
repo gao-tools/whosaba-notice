@@ -39,6 +39,16 @@ const defaultTemplates = {
   }
 };
 
+const defaultEventPresets = [
+  { label: "熊", text: "①21:00〜 熊【live】" },
+  { label: "兵器", text: "①21:00〜 兵器【live】" },
+  { label: "峡谷", text: "①20:00〜 峡谷" },
+  { label: "SVS", text: "①20:00〜 SVS" },
+  { label: "砦", text: "①砦要塞" }
+];
+
+let eventPresets = [];
+
 let templates = structuredClone(defaultTemplates);
 
 function getTodayInfo() {
@@ -267,6 +277,7 @@ function showToast(message) {
 
 document.addEventListener("DOMContentLoaded", () => {
   initTemplates();
+  initEventPresets();
   loadSettings();
   initTodayFields();
   loadWeeklyTemplate();
@@ -282,3 +293,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
   generateNotice();
 });
+
+function initEventPresets() {
+  try {
+    eventPresets = JSON.parse(localStorage.getItem("eventPresets")) || defaultEventPresets;
+  } catch (e) {
+    eventPresets = defaultEventPresets;
+  }
+
+  renderPresetButtons();
+  renderPresetEditor();
+}
+
+function renderPresetButtons() {
+  const box = document.getElementById("presetButtons");
+  box.innerHTML = "";
+
+  eventPresets.forEach(preset => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = preset.label;
+    button.onclick = () => addEventPreset(preset.text);
+    box.appendChild(button);
+  });
+}
+
+function renderPresetEditor() {
+  const editor = document.getElementById("presetEditor");
+  editor.innerHTML = "";
+
+  eventPresets.forEach((preset, index) => {
+    const row = document.createElement("div");
+    row.className = "preset-edit-row";
+
+    row.innerHTML = `
+      <input id="preset-label-${index}" value="${preset.label}" placeholder="表示名" />
+      <input id="preset-text-${index}" value="${preset.text}" placeholder="挿入内容" />
+      <button type="button" class="danger" onclick="deletePresetRow(${index})">削除</button>
+    `;
+
+    editor.appendChild(row);
+  });
+}
+
+function addPresetRow() {
+  eventPresets.push({ label: "新規", text: "①" });
+  renderPresetEditor();
+}
+
+function deletePresetRow(index) {
+  eventPresets.splice(index, 1);
+  renderPresetEditor();
+  renderPresetButtons();
+}
+
+function saveEventPresets() {
+  eventPresets = eventPresets.map((preset, index) => ({
+    label: document.getElementById(`preset-label-${index}`).value,
+    text: document.getElementById(`preset-text-${index}`).value
+  })).filter(preset => preset.label.trim() && preset.text.trim());
+
+  localStorage.setItem("eventPresets", JSON.stringify(eventPresets));
+  renderPresetButtons();
+  renderPresetEditor();
+  showToast("イベントプリセットを保存しました");
+}
