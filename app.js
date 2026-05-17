@@ -358,3 +358,9 @@ function saveEventPresets() {
   renderPresetEditor();
   showToast("イベントプリセットを保存しました");
 }
+
+function clearTodayEvents() {
+  document.getElementById("todayEvents").value = "";
+  generateNotice();
+  showToast("今日の予定をクリアしました");
+}
