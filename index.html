@@ -148,8 +148,21 @@
         <button type="button" class="primary" onclick="saveNoticeStocks()">通知ストックを保存</button>
       </details>
     </section>
-  
-  
+
+    <section class="card collapsible-card">
+      <details>
+        <summary>💾 設定エクスポート / インポート</summary>
+        <p class="hint">PCで作った設定をスマホへ移すときに使います。</p>
+    
+        <button type="button" class="primary" onclick="exportSettings()">設定をエクスポート</button>
+    
+        <label>エクスポート / インポート用データ</label>
+        <textarea id="settingsBackupText" rows="10" placeholder="ここに設定データが表示されます。スマホ側ではここに貼り付けてインポートしてください。"></textarea>
+    
+        <button type="button" onclick="copySettingsBackup()">設定データをコピー</button>
+        <button type="button" class="primary" onclick="importSettings()">設定をインポート</button>
+      </details>
+    </section>
   
   </main>
 
