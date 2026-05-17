@@ -359,16 +359,24 @@ function renderPresetEditor() {
 
 function addPresetRow() {
   readPresetEditorValues();
-  eventPresets.push({ label: "新規", text: "①" });
+
+  eventPresets.push({
+    label: "新規",
+    text: "①"
+  });
+
   renderPresetEditor();
 }
 
 function deletePresetRow(index) {
-  readPresetEditorValues();
   eventPresets.splice(index, 1);
-  saveEventPresets(false);
+
+  localStorage.setItem("eventPresets", JSON.stringify(eventPresets));
+
   renderPresetButtons();
   renderPresetEditor();
+
+  showToast("イベントプリセットを削除しました");
 }
 
 function readPresetEditorValues() {
