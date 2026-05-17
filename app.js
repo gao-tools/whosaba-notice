@@ -842,3 +842,97 @@ async function copyStockText(index) {
     showToast("コピーに失敗しました");
   }
 }
+
+function exportSettings() {
+  const backup = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    weeklyTemplates: JSON.parse(localStorage.getItem("weeklyTemplates") || "null"),
+    selectedWeeklyTemplateId: localStorage.getItem("selectedWeeklyTemplateId"),
+    eventPresets: JSON.parse(localStorage.getItem("eventPresets") || "null"),
+    specialPresets: JSON.parse(localStorage.getItem("specialPresets") || "null"),
+    noticeStocks: JSON.parse(localStorage.getItem("noticeStocks") || "null"),
+    fixedSettings: JSON.parse(localStorage.getItem("fixedSettings") || "null")
+  };
+
+  document.getElementById("settingsBackupText").value =
+    JSON.stringify(backup, null, 2);
+
+  showToast("設定をエクスポートしました");
+}
+
+async function copySettingsBackup() {
+  const text = document.getElementById("settingsBackupText").value;
+
+  if (!text.trim()) {
+    showToast("コピーする設定データがありません");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("設定データをコピーしました");
+  } catch (e) {
+    const area = document.getElementById("settingsBackupText");
+    area.select();
+    document.execCommand("copy");
+    showToast("設定データをコピーしました");
+  }
+}
+
+function importSettings() {
+  const text = document.getElementById("settingsBackupText").value;
+
+  if (!text.trim()) {
+    showToast("インポートする設定データがありません");
+    return;
+  }
+
+  let backup;
+
+  try {
+    backup = JSON.parse(text);
+  } catch (e) {
+    showToast("設定データの形式が正しくありません");
+    return;
+  }
+
+  if (!backup || backup.version !== 1) {
+    showToast("対応していない設定データです");
+    return;
+  }
+
+  if (backup.weeklyTemplates !== null) {
+    localStorage.setItem("weeklyTemplates", JSON.stringify(backup.weeklyTemplates));
+  }
+
+  if (backup.selectedWeeklyTemplateId !== null) {
+    localStorage.setItem("selectedWeeklyTemplateId", backup.selectedWeeklyTemplateId);
+  }
+
+  if (backup.eventPresets !== null) {
+    localStorage.setItem("eventPresets", JSON.stringify(backup.eventPresets));
+  }
+
+  if (backup.specialPresets !== null) {
+    localStorage.setItem("specialPresets", JSON.stringify(backup.specialPresets));
+  }
+
+  if (backup.noticeStocks !== null) {
+    localStorage.setItem("noticeStocks", JSON.stringify(backup.noticeStocks));
+  }
+
+  if (backup.fixedSettings !== null) {
+    localStorage.setItem("fixedSettings", JSON.stringify(backup.fixedSettings));
+  }
+
+  initTemplates();
+  initEventPresets();
+  initSpecialPresets();
+  initNoticeStocks();
+  loadSettings();
+  loadWeeklyTemplate();
+  generateNotice();
+
+  showToast("設定をインポートしました");
+}
