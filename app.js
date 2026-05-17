@@ -1,6 +1,7 @@
 const days = ["月", "火", "水", "木", "金", "土", "日"];
 const ALLIANCE_BIRTHDAY = "2025-04-07";
 const specialCategories = [
+  "毎日",
   "月",
   "火",
   "水",
@@ -626,22 +627,29 @@ function renderSpecialPresetButtons() {
   renderSpecialCategorySelect();
 
   const box = document.getElementById("specialPresetButtons");
-  const selectedCategory = document.getElementById("specialCategorySelect").value;
+  const selectedCategory =
+    document.getElementById("specialCategorySelect").value;
 
   box.innerHTML = "";
 
   specialPresets
-    .filter(
-      preset =>
-        (preset.category || "未分類") === selectedCategory
-    )
+    .filter(preset => {
+      const category = preset.category || "未分類";
+
+      return (
+        category === selectedCategory ||
+        category === "毎日"
+      );
+    })
     .forEach(preset => {
       const button = document.createElement("button");
       button.type = "button";
       button.textContent = preset.label;
+
       button.addEventListener("click", () => {
         addSpecialPreset(preset.text);
       });
+
       box.appendChild(button);
     });
 }
