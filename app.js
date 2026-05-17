@@ -228,7 +228,7 @@ function generateNotice() {
 
   const text = `GaO新聞 ${date}
 ＝＝＝＝＝＝＝
-【移民${migrationDay}日目】
+【同盟${migrationDay}日目】
 ${greeting}
 ${intro}
 ${todayEvents}
