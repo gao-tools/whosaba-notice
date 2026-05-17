@@ -641,6 +641,17 @@ function renderSpecialPresetButtons() {
         category === "毎日"
       );
     })
+    .sort((a, b) => {
+      if (a.category === "毎日" && b.category !== "毎日") {
+        return -1;
+      }
+
+      if (a.category !== "毎日" && b.category === "毎日") {
+        return 1;
+      }
+
+      return 0;
+    })
     .forEach(preset => {
       const button = document.createElement("button");
       button.type = "button";
