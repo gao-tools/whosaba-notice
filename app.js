@@ -481,9 +481,10 @@ function renderSpecialPresetEditor() {
     labelInput.value = preset.label;
     labelInput.placeholder = "表示名";
 
-    const textInput = document.createElement("input");
+    const textInput = document.createElement("textarea");
     textInput.value = preset.text;
     textInput.placeholder = "挿入内容";
+    textInput.rows = 4;
 
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
