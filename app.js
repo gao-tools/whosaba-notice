@@ -48,6 +48,31 @@ const defaultEventPresets = [
   { label: "砦", text: "①砦要塞" }
 ];
 
+const defaultSpecialPresets = [
+  {
+    label: "烈火と牙",
+    text: "⚫︎明日から【烈火と牙】"
+  },
+  {
+    label: "灯台注意",
+    text: "17時以降の灯台は回収せず、明日の朝9時以降に回収しよう！"
+  },
+  {
+    label: "アグネス",
+    text: "今日のアグネスは17時以降に押してね！"
+  },
+  {
+    label: "シールド",
+    text: "シールド切れに注意お願いします！"
+  },
+  {
+    label: "兵調整",
+    text: "兵数調整が必要な方は早めにお願いします！"
+  }
+];
+
+let specialPresets = [];
+
 let eventPresets = [];
 
 let templates = structuredClone(defaultTemplates);
@@ -277,6 +302,7 @@ function showToast(message) {
 document.addEventListener("DOMContentLoaded", () => {
   initTemplates();
   initEventPresets();
+  initSpecialPresets();
   loadSettings();
   initTodayFields();
   loadWeeklyTemplate();
@@ -409,4 +435,129 @@ function clearTodayEvents() {
   document.getElementById("todayEvents").value = "";
   generateNotice();
   showToast("今日の予定をクリアしました");
+}
+
+function initSpecialPresets() {
+  const savedText = localStorage.getItem("specialPresets");
+
+  if (savedText) {
+    try {
+      specialPresets = JSON.parse(savedText);
+    } catch (e) {
+      specialPresets = structuredClone(defaultSpecialPresets);
+    }
+  } else {
+    specialPresets = structuredClone(defaultSpecialPresets);
+  }
+
+  renderSpecialPresetButtons();
+  renderSpecialPresetEditor();
+}
+
+function renderSpecialPresetButtons() {
+  const box = document.getElementById("specialPresetButtons");
+  box.innerHTML = "";
+
+  specialPresets.forEach(preset => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = preset.label;
+    button.addEventListener("click", () => {
+      addSpecialPreset(preset.text);
+    });
+    box.appendChild(button);
+  });
+}
+
+function renderSpecialPresetEditor() {
+  const editor = document.getElementById("specialPresetEditor");
+  editor.innerHTML = "";
+
+  specialPresets.forEach((preset, index) => {
+    const row = document.createElement("div");
+    row.className = "preset-edit-row";
+
+    const labelInput = document.createElement("input");
+    labelInput.value = preset.label;
+    labelInput.placeholder = "表示名";
+
+    const textInput = document.createElement("input");
+    textInput.value = preset.text;
+    textInput.placeholder = "挿入内容";
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "danger";
+    deleteButton.textContent = "削除";
+
+    deleteButton.addEventListener("click", () => {
+      deleteSpecialPresetRow(index);
+    });
+
+    row.appendChild(labelInput);
+    row.appendChild(textInput);
+    row.appendChild(deleteButton);
+
+    editor.appendChild(row);
+  });
+}
+
+function addSpecialPreset(text) {
+  const area = document.getElementById("specialNotice");
+  const current = area.value.trim();
+
+  area.value = current ? `${current}\n${text}` : text;
+  generateNotice();
+}
+
+function clearSpecialNotice() {
+  document.getElementById("specialNotice").value = "";
+  generateNotice();
+  showToast("特記事項をクリアしました");
+}
+
+function addSpecialPresetRow() {
+  readSpecialPresetEditorValues();
+
+  specialPresets.push({
+    label: "新規",
+    text: "⚫︎"
+  });
+
+  renderSpecialPresetEditor();
+}
+
+function deleteSpecialPresetRow(index) {
+  specialPresets.splice(index, 1);
+
+  localStorage.setItem("specialPresets", JSON.stringify(specialPresets));
+
+  renderSpecialPresetButtons();
+  renderSpecialPresetEditor();
+
+  showToast("特記事項プリセットを削除しました");
+}
+
+function readSpecialPresetEditorValues() {
+  const rows = document.querySelectorAll("#specialPresetEditor .preset-edit-row");
+
+  specialPresets = Array.from(rows).map(row => {
+    const inputs = row.querySelectorAll("input");
+
+    return {
+      label: inputs[0].value.trim(),
+      text: inputs[1].value.trim()
+    };
+  }).filter(preset => preset.label && preset.text);
+}
+
+function saveSpecialPresets() {
+  readSpecialPresetEditorValues();
+
+  localStorage.setItem("specialPresets", JSON.stringify(specialPresets));
+
+  renderSpecialPresetButtons();
+  renderSpecialPresetEditor();
+
+  showToast("特記事項プリセットを保存しました");
 }
