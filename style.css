@@ -198,3 +198,31 @@ button.danger {
     grid-template-columns: 1fr;
   }
 }
+
+.preset-buttons-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.preset-buttons-wrap .preset-buttons {
+  flex: 1;
+}
+
+.clear-button {
+  width: auto;
+  min-width: 90px;
+  background: linear-gradient(135deg, #d9534f, #b52b27);
+  white-space: nowrap;
+  margin-top: 0;
+}
+
+@media (max-width: 600px) {
+  .preset-buttons-wrap {
+    flex-direction: column;
+  }
+
+  .clear-button {
+    width: 100%;
+  }
+}
