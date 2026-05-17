@@ -293,10 +293,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initEventPresets() {
-  try {
-    eventPresets = JSON.parse(localStorage.getItem("eventPresets")) || defaultEventPresets;
-  } catch (e) {
-    eventPresets = defaultEventPresets;
+  const savedText = localStorage.getItem("eventPresets");
+
+  if (savedText) {
+    try {
+      eventPresets = JSON.parse(savedText);
+    } catch (e) {
+      eventPresets = structuredClone(defaultEventPresets);
+    }
+  } else {
+    eventPresets = structuredClone(defaultEventPresets);
   }
 
   renderPresetButtons();
@@ -311,7 +317,9 @@ function renderPresetButtons() {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = preset.label;
-    button.onclick = () => addEventPreset(preset.text);
+    button.addEventListener("click", () => {
+      addEventPreset(preset.text);
+    });
     box.appendChild(button);
   });
 }
@@ -324,37 +332,71 @@ function renderPresetEditor() {
     const row = document.createElement("div");
     row.className = "preset-edit-row";
 
-    row.innerHTML = `
-      <input id="preset-label-${index}" value="${preset.label}" placeholder="表示名" />
-      <input id="preset-text-${index}" value="${preset.text}" placeholder="挿入内容" />
-      <button type="button" class="danger" onclick="deletePresetRow(${index})">削除</button>
-    `;
+    const labelInput = document.createElement("input");
+    labelInput.value = preset.label;
+    labelInput.placeholder = "表示名";
+    labelInput.dataset.index = index;
+    labelInput.dataset.field = "label";
+
+    const textInput = document.createElement("input");
+    textInput.value = preset.text;
+    textInput.placeholder = "挿入内容";
+    textInput.dataset.index = index;
+    textInput.dataset.field = "text";
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "danger";
+    deleteButton.textContent = "削除";
+    deleteButton.addEventListener("click", () => {
+      deletePresetRow(index);
+    });
+
+    row.appendChild(labelInput);
+    row.appendChild(textInput);
+    row.appendChild(deleteButton);
 
     editor.appendChild(row);
   });
 }
 
 function addPresetRow() {
+  readPresetEditorValues();
   eventPresets.push({ label: "新規", text: "①" });
   renderPresetEditor();
 }
 
 function deletePresetRow(index) {
+  readPresetEditorValues();
   eventPresets.splice(index, 1);
-  renderPresetEditor();
+  saveEventPresets(false);
   renderPresetButtons();
+  renderPresetEditor();
 }
 
-function saveEventPresets() {
-  eventPresets = eventPresets.map((preset, index) => ({
-    label: document.getElementById(`preset-label-${index}`).value,
-    text: document.getElementById(`preset-text-${index}`).value
-  })).filter(preset => preset.label.trim() && preset.text.trim());
+function readPresetEditorValues() {
+  const rows = document.querySelectorAll(".preset-edit-row");
+
+  eventPresets = Array.from(rows).map(row => {
+    const inputs = row.querySelectorAll("input");
+    return {
+      label: inputs[0].value.trim(),
+      text: inputs[1].value.trim()
+    };
+  }).filter(preset => preset.label && preset.text);
+}
+
+function saveEventPresets(showMessage = true) {
+  readPresetEditorValues();
 
   localStorage.setItem("eventPresets", JSON.stringify(eventPresets));
+
   renderPresetButtons();
   renderPresetEditor();
-  showToast("イベントプリセットを保存しました");
+
+  if (showMessage) {
+    showToast("イベントプリセットを保存しました");
+  }
 }
 
 function clearTodayEvents() {
