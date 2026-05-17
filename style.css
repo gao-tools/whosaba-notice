@@ -282,3 +282,10 @@ button.danger {
     min-height: 150px;
   }
 }
+
+.readonly-field {
+  background: #eef4f9;
+  color: #4f6578;
+  font-weight: 700;
+  cursor: not-allowed;
+}
