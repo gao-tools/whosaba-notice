@@ -457,10 +457,10 @@ function showToast(message) {
 document.addEventListener("DOMContentLoaded", () => {
   initTemplates();
   initEventPresets();
-  initSpecialPresets();
-  initNoticeStocks();
   loadSettings();
   initTodayFields();
+  initSpecialPresets();
+  initNoticeStocks();
   loadWeeklyTemplate();
 
   document.getElementById("noticeDate").addEventListener("input", () => {
@@ -468,6 +468,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSpecialPresetButtons();
     generateNotice();
   });
+
   document.getElementById("migrationDay").addEventListener("input", generateNotice);
   document.getElementById("todayEvents").addEventListener("input", generateNotice);
   document.getElementById("specialNotice").addEventListener("input", generateNotice);
@@ -475,6 +476,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("intro").addEventListener("input", generateNotice);
   document.getElementById("footer").addEventListener("input", generateNotice);
 
+  renderSpecialCategorySelect(true);
+  renderSpecialPresetButtons();
   generateNotice();
 });
 
