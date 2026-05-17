@@ -381,6 +381,7 @@ ${weeklyText}
 ${footer}`;
 
   document.getElementById("result").value = text;
+  updateCharCount(text);
 }
 
 async function copyResult() {
@@ -674,4 +675,20 @@ function saveSpecialPresets() {
   renderSpecialPresetEditor();
 
   showToast("特記事項プリセットを保存しました");
+}
+
+function updateCharCount(text) {
+  const count = text.length;
+  const charCount = document.getElementById("charCount");
+
+  charCount.textContent = `${count} / 300文字`;
+
+  if (count > 300) {
+    charCount.classList.add("over");
+
+    const over = count - 300;
+    charCount.textContent += `（${over}文字オーバー）`;
+  } else {
+    charCount.classList.remove("over");
+  }
 }
