@@ -425,6 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initTemplates();
   initEventPresets();
   initSpecialPresets();
+  initNoticeStocks();
   loadSettings();
   initTodayFields();
   loadWeeklyTemplate();
@@ -700,5 +701,144 @@ function updateCharCount(text) {
     charCount.textContent += `（${over}文字オーバー）`;
   } else {
     charCount.classList.remove("over");
+  }
+}
+
+const defaultNoticeStocks = [
+  {
+    title: "シールド注意",
+    text: "シールド切れに注意お願いします！"
+  },
+  {
+    title: "兵調整",
+    text: "兵数調整が必要な方は早めにお願いします！"
+  }
+];
+
+let noticeStocks = [];
+
+function initNoticeStocks() {
+  const savedText = localStorage.getItem("noticeStocks");
+
+  if (savedText) {
+    try {
+      noticeStocks = JSON.parse(savedText);
+    } catch (e) {
+      noticeStocks = structuredClone(defaultNoticeStocks);
+    }
+  } else {
+    noticeStocks = structuredClone(defaultNoticeStocks);
+  }
+
+  renderNoticeStockEditor();
+}
+
+function renderNoticeStockEditor() {
+  const editor = document.getElementById("noticeStockEditor");
+  editor.innerHTML = "";
+
+  noticeStocks.forEach((stock, index) => {
+    const row = document.createElement("div");
+    row.className = "notice-stock-row";
+
+    const titleInput = document.createElement("input");
+    titleInput.value = stock.title;
+    titleInput.placeholder = "タイトル";
+
+    const textArea = document.createElement("textarea");
+    textArea.value = stock.text;
+    textArea.placeholder = "通知内容";
+    textArea.rows = 5;
+
+    const buttonRow = document.createElement("div");
+    buttonRow.className = "stock-button-row";
+
+    const copyButton = document.createElement("button");
+    copyButton.type = "button";
+    copyButton.className = "primary";
+    copyButton.textContent = "コピー";
+    copyButton.addEventListener("click", () => {
+      copyStockText(index);
+    });
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "danger";
+    deleteButton.textContent = "削除";
+    deleteButton.addEventListener("click", () => {
+      deleteNoticeStockRow(index);
+    });
+
+    buttonRow.appendChild(copyButton);
+    buttonRow.appendChild(deleteButton);
+
+    row.appendChild(titleInput);
+    row.appendChild(textArea);
+    row.appendChild(buttonRow);
+
+    editor.appendChild(row);
+  });
+}
+
+function readNoticeStockEditorValues() {
+  const rows = document.querySelectorAll("#noticeStockEditor .notice-stock-row");
+
+  noticeStocks = Array.from(rows).map(row => {
+    const titleInput = row.querySelector("input");
+    const textArea = row.querySelector("textarea");
+
+    return {
+      title: titleInput.value.trim(),
+      text: textArea.value.trim()
+    };
+  }).filter(stock => stock.title && stock.text);
+}
+
+function addNoticeStockRow() {
+  readNoticeStockEditorValues();
+
+  noticeStocks.push({
+    title: "新規通知",
+    text: ""
+  });
+
+  renderNoticeStockEditor();
+}
+
+function deleteNoticeStockRow(index) {
+  noticeStocks.splice(index, 1);
+
+  localStorage.setItem("noticeStocks", JSON.stringify(noticeStocks));
+
+  renderNoticeStockEditor();
+
+  showToast("通知ストックを削除しました");
+}
+
+function saveNoticeStocks() {
+  readNoticeStockEditorValues();
+
+  localStorage.setItem("noticeStocks", JSON.stringify(noticeStocks));
+
+  renderNoticeStockEditor();
+
+  showToast("通知ストックを保存しました");
+}
+
+async function copyStockText(index) {
+  readNoticeStockEditorValues();
+
+  const text = noticeStocks[index]?.text || "";
+
+  if (!text.trim()) {
+    showToast("コピーする内容がありません");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("通知ストックをコピーしました");
+  } catch (e) {
+    showToast("コピーに失敗しました");
   }
 }
