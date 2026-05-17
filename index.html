@@ -35,9 +35,19 @@
       <input id="migrationDay" type="number" />
 
       <label>今日の予定</label>
-      <div id="presetButtons" class="preset-buttons"></div>
+      <div class="preset-buttons-wrap">
+        <div id="presetButtons" class="preset-buttons"></div>
+      
+        <button
+          type="button"
+          class="danger clear-button"
+          onclick="clearTodayEvents()"
+        >
+          クリア
+        </button>
+      </div>
       <textarea id="todayEvents" rows="4"></textarea>
-
+      
       <label>特記事項</label>
       <textarea id="specialNotice" rows="6"></textarea>
 
