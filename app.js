@@ -216,18 +216,16 @@ function initTodayFields() {
 }
 
 function calcMigrationDay() {
-  const startDate = new Date(ALLIANCE_BIRTHDAY + "T00:00:00");
+  const rawDate = document.getElementById("noticeDate").value;
 
-  const today = new Date();
-  const todayDate = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  );
+  if (!rawDate) return;
+
+  const startDate = new Date(ALLIANCE_BIRTHDAY + "T00:00:00");
+  const targetDate = new Date(rawDate + "T00:00:00");
 
   const diff =
     Math.floor(
-      (todayDate - startDate) /
+      (targetDate - startDate) /
       (1000 * 60 * 60 * 24)
     ) + 1;
 
@@ -454,6 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadWeeklyTemplate();
 
   document.getElementById("noticeDate").addEventListener("input", () => {
+    calcMigrationDay();
     renderSpecialCategorySelect(true);
     renderSpecialPresetButtons();
     generateNotice();
