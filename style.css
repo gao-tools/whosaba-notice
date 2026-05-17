@@ -384,3 +384,38 @@ select {
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 13px;
 }
+
+.special-preset-header {
+  display: grid;
+  grid-template-columns: 1fr 90px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.special-preset-header select,
+.special-preset-header button {
+  margin-top: 0;
+}
+
+.special-buttons {
+  margin-bottom: 8px;
+}
+
+.special-edit-row {
+  grid-template-columns: 0.7fr 0.7fr 1.8fr 70px;
+}
+
+@media (max-width: 600px) {
+  .special-preset-header {
+    grid-template-columns: 1fr;
+  }
+
+  .special-preset-header .clear-button {
+    width: 100%;
+  }
+
+  .special-edit-row {
+    grid-template-columns: 1fr;
+  }
+}
