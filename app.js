@@ -631,7 +631,12 @@ function addSpecialPreset(text) {
   const area = document.getElementById("specialNotice");
   const current = area.value.trim();
 
-  area.value = current ? `${current}\n${text}` : text;
+  if (!current) {
+    area.value = text;
+  } else {
+    area.value = `${current}\n\n${text}`;
+  }
+
   generateNotice();
 }
 
