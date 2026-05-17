@@ -171,3 +171,30 @@ button.primary {
     font-size: 24px;
   }
 }
+
+.hint {
+  margin-top: -4px;
+  color: #5c6f7f;
+  font-size: 14px;
+}
+
+.preset-edit-row {
+  display: grid;
+  grid-template-columns: 0.8fr 1.6fr 70px;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+button.danger {
+  background: #d9534f;
+  margin-top: 0;
+  padding: 10px 6px;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .preset-edit-row {
+    grid-template-columns: 1fr;
+  }
+}
