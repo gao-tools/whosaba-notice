@@ -379,3 +379,8 @@ select {
 .stock-button-row button {
   margin-top: 10px;
 }
+
+#settingsBackupText {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 13px;
+}
