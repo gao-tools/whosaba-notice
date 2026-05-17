@@ -420,13 +420,9 @@ select {
   }
 }
 .daily-button {
-  background: linear-gradient(
-    135deg,
-    #ffb347,
-    #ff9800
-  );
-  color: white;
-  border: none;
+  background: linear-gradient(135deg, #ffb347, #ff9800) !important;
+  color: #fff !important;
+  border: none !important;
 }
 
 .daily-button:hover {
