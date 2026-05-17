@@ -34,17 +34,19 @@
       <input id="migrationDay" type="number" readonly class="readonly-field" />
 
       <label>今日の予定</label>
-      <div class="preset-buttons-wrap">
-        <div id="presetButtons" class="preset-buttons"></div>
+      <div class="special-preset-header">
+        <select id="specialCategorySelect" onchange="renderSpecialPresetButtons()"></select>
       
         <button
           type="button"
           class="danger clear-button"
-          onclick="clearTodayEvents()"
+          onclick="clearSpecialNotice()"
         >
           クリア
         </button>
       </div>
+      
+      <div id="specialPresetButtons" class="preset-buttons special-buttons"></div>
       <textarea id="todayEvents" rows="4"></textarea>
       
       <label>特記事項</label>
