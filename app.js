@@ -463,7 +463,11 @@ document.addEventListener("DOMContentLoaded", () => {
   initTodayFields();
   loadWeeklyTemplate();
 
-  document.getElementById("noticeDate").addEventListener("input", generateNotice);
+  document.getElementById("noticeDate").addEventListener("input", () => {
+    renderSpecialCategorySelect(true);
+    renderSpecialPresetButtons();
+    generateNotice();
+  });
   document.getElementById("migrationDay").addEventListener("input", generateNotice);
   document.getElementById("todayEvents").addEventListener("input", generateNotice);
   document.getElementById("specialNotice").addEventListener("input", generateNotice);
@@ -639,7 +643,7 @@ function renderSpecialPresetButtons() {
     });
 }
 
-function renderSpecialCategorySelect() {
+function renderSpecialCategorySelect(forceDefault = false) {
   const select = document.getElementById("specialCategorySelect");
 
   const rawDate = document.getElementById("noticeDate")?.value;
@@ -648,11 +652,27 @@ function renderSpecialCategorySelect() {
 
   if (rawDate) {
     const dateObj = new Date(rawDate + "T00:00:00");
-
     const week = ["日", "月", "火", "水", "木", "金", "土"];
-
     defaultCategory = week[dateObj.getDay()];
   }
+
+  const current = forceDefault
+    ? defaultCategory
+    : select.value || defaultCategory;
+
+  select.innerHTML = "";
+
+  specialCategories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    select.appendChild(option);
+  });
+
+  select.value = specialCategories.includes(current)
+    ? current
+    : defaultCategory;
+}
 
   const current =
     select.value ||
