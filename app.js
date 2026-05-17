@@ -90,10 +90,19 @@ let specialPresets = [];
 
 let eventPresets = [];
 
-function getTodayInfo() {
+function getTodayInfo(offsetDays = 0) {
   const now = new Date();
+
+  now.setDate(now.getDate() + offsetDays);
+
   const week = ["日", "月", "火", "水", "木", "金", "土"];
+
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+
   return {
+    rawDate: `${yyyy}-${mm}-${dd}`,
     dateText: `${now.getMonth() + 1}月${now.getDate()}日(${week[now.getDay()]})`,
     dayLabel: week[now.getDay()]
   };
@@ -186,11 +195,11 @@ function loadSettings() {
 }
 
 function initTodayFields() {
-  const today = getTodayInfo();
+  const tomorrow = getTodayInfo(1);
 
   const noticeDate = document.getElementById("noticeDate");
   if (!noticeDate.value) {
-    noticeDate.value = today.dateText;
+    noticeDate.value = tomorrow.rawDate;
   }
 
   const todayEvents = document.getElementById("todayEvents");
@@ -365,7 +374,11 @@ function toCircledNumber(num) {
 }
 
 function generateNotice() {
-  const date = document.getElementById("noticeDate").value;
+  const rawDate = document.getElementById("noticeDate").value;
+  const dateObj = new Date(rawDate + "T00:00:00");
+  const week = ["日", "月", "火", "水", "木", "金", "土"];
+  const date =
+  `${dateObj.getMonth() + 1}月${dateObj.getDate()}日(${week[dateObj.getDay()]})`;
   const migrationDay = document.getElementById("migrationDay").value;
   const todayEvents = document.getElementById("todayEvents").value;
   const specialNotice = document.getElementById("specialNotice").value;
