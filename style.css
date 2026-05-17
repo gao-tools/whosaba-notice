@@ -1,19 +1,40 @@
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: #f4f6f8;
-  color: #222;
+  background:
+    radial-gradient(circle at top, #244b7a 0, transparent 35%),
+    linear-gradient(180deg, #071421 0%, #10283d 45%, #edf6ff 45%, #f4f8fb 100%);
+  color: #1d2733;
 }
 
 .app {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 18px;
+}
+
+.hero {
+  color: #fff;
+  padding: 18px 4px 10px;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
 }
 
 h1 {
-  text-align: center;
-  font-size: 24px;
+  margin: 12px 0 4px;
+  font-size: 28px;
+}
+
+.lead {
+  margin: 0;
+  opacity: 0.9;
 }
 
 h2 {
@@ -22,18 +43,26 @@ h2 {
 }
 
 .card {
-  background: #fff;
-  border-radius: 16px;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(170,210,240,0.65);
+  border-radius: 18px;
   padding: 16px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(8,30,50,0.12);
+  backdrop-filter: blur(8px);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 label {
   display: block;
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 input,
@@ -42,13 +71,15 @@ select {
   width: 100%;
   box-sizing: border-box;
   font-size: 16px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 11px;
+  border: 1px solid #c7d7e5;
+  border-radius: 12px;
+  background: #fbfdff;
 }
 
 textarea {
   resize: vertical;
+  line-height: 1.5;
 }
 
 button {
@@ -56,21 +87,87 @@ button {
   margin-top: 14px;
   padding: 12px;
   border: none;
-  border-radius: 12px;
-  background: #1f6feb;
+  border-radius: 13px;
+  background: #335d7f;
   color: #fff;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 16px;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #1684d8, #0b5fab);
+}
+
+.preset-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.preset-buttons button {
+  margin-top: 0;
+  padding: 9px 6px;
+  font-size: 14px;
+  background: #e6f3ff;
+  color: #13527d;
+  border: 1px solid #b8dcf6;
 }
 
 .week-row {
   display: grid;
-  grid-template-columns: 44px 1fr 1.5fr;
+  grid-template-columns: 42px 1fr 1.5fr;
   gap: 8px;
   align-items: center;
   margin-top: 8px;
+  padding: 7px;
+  border-radius: 12px;
+}
+
+.week-row.today {
+  background: #fff3c4;
+  border: 1px solid #f0d46c;
 }
 
 .week-day {
-  font-weight: bold;
+  font-weight: 800;
+  text-align: center;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  background: #10283d;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.25s;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.toast.show {
+  opacity: 1;
+  bottom: 34px;
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 12px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .preset-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  h1 {
+    font-size: 24px;
+  }
 }
