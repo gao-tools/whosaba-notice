@@ -132,7 +132,14 @@ function initTemplates() {
 
 function renderWeeklyTemplateSelect(selectedId) {
   const select = document.getElementById("weeklyTemplate");
-  const current = selectedId || select.value || templates[0]?.id;
+  const savedSelected =
+  localStorage.getItem("selectedWeeklyTemplateId");
+
+  const current =
+    selectedId ||
+    savedSelected ||
+    select.value ||
+    templates[0]?.id;
 
   select.innerHTML = "";
 
@@ -212,6 +219,7 @@ function calcMigrationDay() {
 
 function loadWeeklyTemplate() {
   const key = document.getElementById("weeklyTemplate").value;
+  localStorage.setItem("selectedWeeklyTemplateId", key);
   const template = templates.find(t => t.id === key) || templates[0];
   const editor = document.getElementById("weeklyEditor");
   const today = getTodayInfo().dayLabel;
