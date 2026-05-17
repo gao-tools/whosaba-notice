@@ -1,4 +1,5 @@
 const days = ["月", "火", "水", "木", "金", "土", "日"];
+const ALLIANCE_BIRTHDAY = "2025-04-07";
 
 const defaultTemplates = {
   normal: {
@@ -116,12 +117,6 @@ function initTodayFields() {
     noticeDate.value = today.dateText;
   }
 
-  const savedStart = localStorage.getItem("migrationStartDate");
-  if (savedStart) {
-    document.getElementById("migrationStartDate").value = savedStart;
-    calcMigrationDay();
-  }
-
   const todayEvents = document.getElementById("todayEvents");
   if (!todayEvents.value.trim()) {
     todayEvents.value = "①21:00〜 兵器【live】";
@@ -132,24 +127,28 @@ function initTodayFields() {
     specialNotice.value =
       "⚫︎明日から【烈火と牙】\n今日のアグネスは17時以降に押してね！\nあと17時以降の灯台回収せず、明日の朝9時以降に回収しよう！";
   }
+  calcMigrationDay();
 }
 
 function calcMigrationDay() {
-  const start = document.getElementById("migrationStartDate").value;
-  if (!start) return;
+  const startDate = new Date(ALLIANCE_BIRTHDAY + "T00:00:00");
 
-  localStorage.setItem("migrationStartDate", start);
-
-  const startDate = new Date(start + "T00:00:00");
   const today = new Date();
-  const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const todayDate = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
 
-  const diff = Math.floor((todayDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+  const diff =
+    Math.floor(
+      (todayDate - startDate) /
+      (1000 * 60 * 60 * 24)
+    ) + 1;
 
-  if (diff > 0) {
-    document.getElementById("migrationDay").value = diff;
-    generateNotice();
-  }
+  document.getElementById("migrationDay").value = diff;
+
+  generateNotice();
 }
 
 function loadWeeklyTemplate() {
@@ -282,7 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initTodayFields();
   loadWeeklyTemplate();
 
-  document.getElementById("migrationStartDate").addEventListener("change", calcMigrationDay);
   document.getElementById("noticeDate").addEventListener("input", generateNotice);
   document.getElementById("migrationDay").addEventListener("input", generateNotice);
   document.getElementById("todayEvents").addEventListener("input", generateNotice);
