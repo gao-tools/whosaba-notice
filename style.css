@@ -419,3 +419,16 @@ select {
     grid-template-columns: 1fr;
   }
 }
+.daily-button {
+  background: linear-gradient(
+    135deg,
+    #ffb347,
+    #ff9800
+  );
+  color: white;
+  border: none;
+}
+
+.daily-button:hover {
+  opacity: 0.92;
+}
