@@ -226,3 +226,59 @@ button.danger {
     width: 100%;
   }
 }
+
+@media (max-width: 600px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .hero {
+    padding: 52px 16px 14px;
+  }
+
+  .card {
+    border-radius: 18px 18px 0 0;
+    margin: 0;
+    padding: 20px 16px;
+    box-shadow: none;
+  }
+
+  input,
+  textarea,
+  select {
+    min-height: 52px;
+  }
+
+  .preset-buttons-wrap {
+    display: block;
+  }
+
+  .preset-buttons-wrap .preset-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .preset-buttons button {
+    width: 100%;
+    min-height: 46px;
+    font-size: 15px;
+  }
+
+  .clear-button {
+    width: 100%;
+    min-height: 48px;
+    margin: 12px 0 8px;
+    border-radius: 14px;
+  }
+
+  #todayEvents {
+    min-height: 150px;
+  }
+}
