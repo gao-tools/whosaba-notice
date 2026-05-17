@@ -289,3 +289,36 @@ button.danger {
   font-weight: 700;
   cursor: not-allowed;
 }
+
+.collapsible-card details {
+  width: 100%;
+}
+
+.collapsible-card summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 4px 0;
+  user-select: none;
+}
+
+.collapsible-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible-card summary::after {
+  content: "＋";
+  float: right;
+  color: #4f6f8d;
+  font-size: 20px;
+  transition: transform 0.2s;
+}
+
+.collapsible-card details[open] summary::after {
+  content: "－";
+}
+
+.collapsible-card details > *:not(summary) {
+  margin-top: 14px;
+}
