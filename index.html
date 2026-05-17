@@ -45,6 +45,19 @@
       <textarea id="todayEvents" rows="4"></textarea>
       
       <label>特記事項</label>
+
+      <div class="preset-buttons-wrap">
+        <div id="specialPresetButtons" class="preset-buttons"></div>
+      
+        <button
+          type="button"
+          class="danger clear-button"
+          onclick="clearSpecialNotice()"
+        >
+          クリア
+        </button>
+      </div>
+      
       <textarea id="specialNotice" rows="6"></textarea>
 
       <button class="primary" onclick="generateNotice()">通知文を生成</button>
@@ -73,6 +86,16 @@
     
       <button type="button" onclick="addPresetRow()">＋ プリセット追加</button>
       <button type="button" class="primary" onclick="saveEventPresets()">イベントプリセットを保存</button>
+    </section>
+
+    <section class="card">
+      <h2>特記事項プリセット管理</h2>
+      <p class="hint">特記事項に追加するボタンを編集できます。</p>
+    
+      <div id="specialPresetEditor"></div>
+    
+      <button type="button" onclick="addSpecialPresetRow()">＋ プリセット追加</button>
+      <button type="button" class="primary" onclick="saveSpecialPresets()">特記事項プリセットを保存</button>
     </section>
     
     <section class="card">
