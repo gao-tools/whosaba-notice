@@ -69,23 +69,25 @@
       <button class="primary" onclick="generateNotice()">通知文を生成</button>
     </section>
 
-    <section class="card">
-      <h2>週間イベント</h2>
-
-      <label>週間テンプレ</label>
-      <select id="weeklyTemplate" onchange="loadWeeklyTemplate()"></select>
-      
-      <label>テンプレタイトル</label>
-      <input id="weeklyTemplateName" type="text" placeholder="例：通常週" />
-      
-      <div id="weeklyEditor"></div>
-      
-      <div class="button-row">
-        <button type="button" onclick="addWeeklyTemplate()">＋ テンプレ追加</button>
-        <button type="button" class="danger" onclick="deleteWeeklyTemplate()">削除</button>
-      </div>
-      
-      <button type="button" class="primary" onclick="saveWeeklyTemplate()">週間テンプレを保存</button>
+    <section class="card collapsible-card">
+      <details>
+        <summary>📅 週間イベント</summary>
+    
+        <label>週間テンプレ</label>
+        <select id="weeklyTemplate" onchange="loadWeeklyTemplate()"></select>
+        
+        <label>テンプレタイトル</label>
+        <input id="weeklyTemplateName" type="text" placeholder="例：通常週" />
+        
+        <div id="weeklyEditor"></div>
+        
+        <div class="button-row">
+          <button type="button" onclick="addWeeklyTemplate()">＋ テンプレ追加</button>
+          <button type="button" class="danger" onclick="deleteWeeklyTemplate()">削除</button>
+        </div>
+        
+        <button type="button" class="primary" onclick="saveWeeklyTemplate()">週間テンプレを保存</button>
+      </details>
     </section>
 
     <section class="card">
