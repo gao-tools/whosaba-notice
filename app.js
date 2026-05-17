@@ -212,17 +212,6 @@ function initTodayFields() {
   if (!noticeDate.value) {
     noticeDate.value = tomorrow.rawDate;
   }
-
-  const todayEvents = document.getElementById("todayEvents");
-  if (!todayEvents.value.trim()) {
-    todayEvents.value = "①21:00〜 兵器【live】";
-  }
-
-  const specialNotice = document.getElementById("specialNotice");
-  if (!specialNotice.value.trim()) {
-    specialNotice.value =
-      "⚫︎明日から【烈火と牙】\n今日のアグネスは17時以降に押してね！\nあと17時以降の灯台回収せず、明日の朝9時以降に回収しよう！";
-  }
   calcMigrationDay();
 }
 
@@ -552,7 +541,7 @@ function addPresetRow() {
 
   eventPresets.push({
     label: "新規",
-    text: "①"
+    text: ""
   });
 
   renderPresetEditor();
